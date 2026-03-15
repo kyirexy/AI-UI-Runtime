@@ -1,0 +1,11 @@
+{
+  "extensionName": {
+    "message": "AI UI Runtime"
+  },
+  "extensionDescription": {
+    "message": "Capture visual browser actions and turn them into structured UI intent JSON."
+  },
+  "actionTitle": {
+    "message": "AI UI Runtime"
+  }
+}

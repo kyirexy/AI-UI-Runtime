@@ -1,0 +1,38 @@
+{
+  "name": "ai-ui-runtime",
+  "version": "0.0.1",
+  "description": "一个面向浏览器扩展的 AI UI Runtime MVP，用于把视觉操作和文字修改要求转换成可复制给 AI 的上下文。",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kyirexy/AI-UI-Runtime.git"
+  },
+  "homepage": "https://github.com/kyirexy/AI-UI-Runtime",
+  "bugs": {
+    "url": "https://github.com/kyirexy/AI-UI-Runtime/issues"
+  },
+  "keywords": [
+    "chrome-extension",
+    "ai-ui",
+    "ui-runtime",
+    "intent-engine",
+    "visual-editing"
+  ],
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "scripts": {
+    "dev": "concurrently -n demo,extension -c blue,green \"pnpm dev:demo\" \"pnpm dev:extension\"",
+    "dev:demo": "pnpm --filter @ai-ui-runtime/demo-app dev",
+    "dev:extension": "pnpm --filter @ai-ui-runtime/browser-extension dev",
+    "build": "pnpm --filter @ai-ui-runtime/shared build && pnpm --filter @ai-ui-runtime/ui-runtime build && pnpm --filter @ai-ui-runtime/intent-engine build && pnpm --filter @ai-ui-runtime/demo-app build && pnpm --filter @ai-ui-runtime/browser-extension build",
+    "build:extension": "pnpm --filter @ai-ui-runtime/browser-extension build",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.8.2"
+  }
+}

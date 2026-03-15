@@ -1,0 +1,11 @@
+{
+  "extensionName": {
+    "message": "AI UI 运行时"
+  },
+  "extensionDescription": {
+    "message": "把浏览器中的视觉操作捕获为结构化 UI Intent JSON。"
+  },
+  "actionTitle": {
+    "message": "AI UI 运行时"
+  }
+}

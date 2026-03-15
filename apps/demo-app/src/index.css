@@ -1,0 +1,470 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600&family=Fira+Sans:wght@300;400;500;600;700&display=swap");
+
+:root {
+  color-scheme: light;
+  font-family: "Fira Sans", "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 30%),
+    linear-gradient(180deg, #f8fafc 0%, #eef4ff 100%);
+  color: #1e293b;
+  --app-bg: rgba(248, 250, 252, 0.96);
+  --panel-bg: rgba(255, 255, 255, 0.9);
+  --panel-border: rgba(148, 163, 184, 0.28);
+  --panel-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+  --primary: #2563eb;
+  --primary-strong: #1d4ed8;
+  --accent: #f97316;
+  --text-main: #1e293b;
+  --text-muted: #475569;
+  --surface: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--text-main);
+  background:
+    linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(180deg, #f8fafc 0%, #eef4ff 100%);
+  background-size: 48px 48px, 48px 48px, cover;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.topbar {
+  position: sticky;
+  top: 16px;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 22px;
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: var(--panel-shadow);
+  backdrop-filter: blur(20px);
+}
+
+.brand-mark {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(249, 115, 22, 0.2));
+}
+
+.brand-mark__core,
+.brand-mark__pulse {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  border-radius: 999px;
+}
+
+.brand-mark__core {
+  width: 14px;
+  height: 14px;
+  background: linear-gradient(135deg, var(--primary), #60a5fa);
+}
+
+.brand-mark__pulse {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(37, 99, 235, 0.28);
+}
+
+.topbar__title-group h1,
+.hero-panel h2,
+.feature-card h3,
+.detail-panel h3,
+.activity-panel h3,
+.timeline__item h4 {
+  margin: 0;
+  font-family: "Fira Code", "PingFang SC", "Microsoft YaHei", "Consolas", monospace;
+}
+
+.topbar__title-group h1 {
+  font-size: 1.6rem;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary-strong);
+}
+
+.topbar__nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.topbar__nav a {
+  padding: 10px 12px;
+  border-radius: 999px;
+  color: var(--text-muted);
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.topbar__nav a:hover,
+.topbar__nav a:focus-visible {
+  color: var(--text-main);
+  background: rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.sidebar,
+.hero-panel,
+.feature-card,
+.detail-panel,
+.activity-panel {
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  background: var(--panel-bg);
+  box-shadow: var(--panel-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+}
+
+.sidebar__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar__label {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.sidebar__item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--text-main);
+  text-align: left;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.sidebar__item:hover,
+.sidebar__item:focus-visible,
+.feature-card:hover,
+.feature-card:focus-within {
+  transform: translateY(-2px);
+  border-color: rgba(37, 99, 235, 0.3);
+  box-shadow: 0 18px 32px rgba(37, 99, 235, 0.14);
+  outline: none;
+}
+
+.sidebar__item--active {
+  border-color: rgba(37, 99, 235, 0.3);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(96, 165, 250, 0.06));
+}
+
+.stats-list {
+  display: grid;
+  gap: 12px;
+}
+
+.stat-card {
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(241, 245, 249, 0.96));
+}
+
+.stat-card p,
+.stat-card strong,
+.stat-card span {
+  display: block;
+}
+
+.stat-card p {
+  margin: 0 0 4px;
+  color: var(--text-muted);
+}
+
+.stat-card strong {
+  margin-bottom: 4px;
+  font-size: 1.35rem;
+  font-family: "Fira Code", "PingFang SC", "Microsoft YaHei", "Consolas", monospace;
+}
+
+.stat-card span {
+  color: var(--primary-strong);
+  font-size: 0.9rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hero-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  padding: 28px;
+}
+
+.hero-panel__copy {
+  max-width: 62ch;
+  margin: 14px 0 0;
+  color: var(--text-muted);
+}
+
+.hero-panel__actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.feature-card {
+  padding: 22px;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.feature-card__header,
+.detail-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.feature-card__tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--primary-strong);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.feature-card p,
+.timeline__item p,
+.activity-list li {
+  color: var(--text-muted);
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  gap: 20px;
+}
+
+.detail-panel,
+.activity-panel {
+  padding: 24px;
+}
+
+.timeline {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.timeline__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.timeline__index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.16), rgba(59, 130, 246, 0.08));
+  color: var(--primary-strong);
+  font-family: "Fira Code", "PingFang SC", "Microsoft YaHei", "Consolas", monospace;
+  font-weight: 600;
+}
+
+.activity-list {
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.activity-list li {
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.primary-button,
+.secondary-button,
+.ghost-button {
+  min-height: 44px;
+  padding: 11px 16px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, var(--primary), #3b82f6);
+  color: #fff;
+  box-shadow: 0 16px 28px rgba(37, 99, 235, 0.28);
+}
+
+.secondary-button {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-main);
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.ghost-button {
+  background: transparent;
+  color: var(--primary-strong);
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.ghost-button:hover,
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.ghost-button:focus-visible {
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.ghost-button:focus-visible,
+.sidebar__item:focus-visible {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+@media (max-width: 1180px) {
+  .topbar {
+    grid-template-columns: auto 1fr;
+  }
+
+  .topbar__nav {
+    grid-column: 1 / -1;
+    flex-wrap: wrap;
+  }
+
+  .layout,
+  .content-grid,
+  .hero-panel,
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    padding: 16px;
+  }
+
+  .topbar,
+  .sidebar,
+  .hero-panel,
+  .feature-card,
+  .detail-panel,
+  .activity-panel {
+    border-radius: 20px;
+  }
+
+  .hero-panel__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

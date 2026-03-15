@@ -1,0 +1,25 @@
+{
+  "name": "@ai-ui-runtime/browser-extension",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "dev": "node ./scripts/build.mjs --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@ai-ui-runtime/intent-engine": "workspace:*",
+    "@ai-ui-runtime/shared": "workspace:*",
+    "@ai-ui-runtime/ui-runtime": "workspace:*",
+    "interactjs": "^1.10.27",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.302",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "esbuild": "^0.25.1"
+  }
+}
