@@ -9,3 +9,4 @@ coverage
 pnpm-debug.log*
 .idea
 .vscode
+/yanshi.mp4

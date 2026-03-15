@@ -1,15 +1,17 @@
 # Demo Media
 
-Place screenshots and recording GIFs for the repository here.
+This folder stores repository-ready demo assets.
 
-Suggested files:
+Current files:
 
-- `demo-overview.png`
-- `position-flow.gif`
-- `size-flow.gif`
-- `describe-flow.gif`
+- `ai-ui-runtime-demo.mp4`: main walkthrough video for the public repository
 
-After assets are added, reference them from:
+Notes:
 
-- `README.md`
-- `README.en.md`
+- Video assets are tracked with Git LFS.
+- Keep future demo videos under `docs/media/` so README links stay stable.
+- If you add screenshots or GIFs later, prefer these names:
+  - `demo-overview.png`
+  - `position-flow.gif`
+  - `size-flow.gif`
+  - `describe-flow.gif`

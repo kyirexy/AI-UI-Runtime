@@ -1,7 +1,7 @@
 {
   "name": "ai-ui-runtime",
   "version": "0.0.1",
-  "description": "一个面向浏览器扩展的 AI UI Runtime MVP，用于把视觉操作和文字修改要求转换成可复制给 AI 的上下文。",
+  "description": "An open-source AI UI Runtime MVP for turning visual UI actions and written change requests into AI-ready context.",
   "private": true,
   "license": "MIT",
   "repository": {
