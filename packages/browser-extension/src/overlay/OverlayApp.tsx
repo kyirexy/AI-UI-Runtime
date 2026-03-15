@@ -181,6 +181,7 @@ export function OverlayApp({ locale, onExit, overlayHost }: OverlayAppProps): JS
   const lastPreviewedComponentsRef = useRef<NonNullable<SelectedComponent>[]>([]);
   const panelRef = useRef<HTMLElement | null>(null);
   const panelDragRef = useRef<PanelDragState | null>(null);
+  const primaryResizeFrameRef = useRef<HTMLDivElement | null>(null);
   const strings = getExtensionStrings(locale);
   const selectedComponents = state.selectedComponents;
   const primarySelectedComponent = getActiveSelectedComponent(state);
@@ -445,6 +446,7 @@ export function OverlayApp({ locale, onExit, overlayHost }: OverlayAppProps): JS
       mode: state.mode,
       primarySelectedComponent: currentPrimarySelectedComponent,
       selectedCount: currentSelectedComponents.length,
+      overlayFrameElement: primaryResizeFrameRef.current,
       intentEngine: intentEngineRef.current,
       onSelectedRectChange(rect) {
         if (!currentPrimarySelectedComponent) {
@@ -619,7 +621,10 @@ export function OverlayApp({ locale, onExit, overlayHost }: OverlayAppProps): JS
         return (
           <div
             key={component.id}
-            className={`aiui-frame ${isPrimary ? "aiui-frame--selected" : "aiui-frame--selected aiui-frame--group"}`}
+            ref={isPrimary ? primaryResizeFrameRef : null}
+            className={`aiui-frame ${
+              isPrimary ? "aiui-frame--selected" : "aiui-frame--selected aiui-frame--group"
+            } ${isPrimary && state.mode === "resize" ? "aiui-frame--resize-active" : ""}`}
             style={toFrameStyle(component.rect)}
           >
             {isPrimary ? (
@@ -629,8 +634,12 @@ export function OverlayApp({ locale, onExit, overlayHost }: OverlayAppProps): JS
                   <>
                     <span className="aiui-frame__handle aiui-frame__handle--top-left" />
                     <span className="aiui-frame__handle aiui-frame__handle--top-right" />
+                    <span className="aiui-frame__handle aiui-frame__handle--top" />
+                    <span className="aiui-frame__handle aiui-frame__handle--right" />
                     <span className="aiui-frame__handle aiui-frame__handle--bottom-left" />
                     <span className="aiui-frame__handle aiui-frame__handle--bottom-right" />
+                    <span className="aiui-frame__handle aiui-frame__handle--bottom" />
+                    <span className="aiui-frame__handle aiui-frame__handle--left" />
                   </>
                 ) : null}
               </>

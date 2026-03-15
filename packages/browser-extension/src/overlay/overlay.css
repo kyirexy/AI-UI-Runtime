@@ -46,6 +46,11 @@
     0 10px 20px rgba(15, 23, 42, 0.08);
 }
 
+.aiui-frame--resize-active {
+  pointer-events: auto;
+  touch-action: none;
+}
+
 .aiui-frame__label {
   position: absolute;
   top: -30px;
@@ -82,32 +87,59 @@
 
 .aiui-frame__handle {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
   border: 2px solid #ffffff;
   border-radius: 999px;
   background: #f97316;
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.18);
+  pointer-events: auto;
 }
 
 .aiui-frame__handle--top-left {
-  top: -6px;
-  left: -6px;
+  top: -8px;
+  left: -8px;
 }
 
 .aiui-frame__handle--top-right {
-  top: -6px;
-  right: -6px;
+  top: -8px;
+  right: -8px;
 }
 
 .aiui-frame__handle--bottom-left {
-  bottom: -6px;
-  left: -6px;
+  bottom: -8px;
+  left: -8px;
 }
 
 .aiui-frame__handle--bottom-right {
-  right: -6px;
-  bottom: -6px;
+  right: -8px;
+  bottom: -8px;
+}
+
+.aiui-frame__handle--top,
+.aiui-frame__handle--bottom {
+  left: calc(50% - 7px);
+}
+
+.aiui-frame__handle--left,
+.aiui-frame__handle--right {
+  top: calc(50% - 7px);
+}
+
+.aiui-frame__handle--top {
+  top: -8px;
+}
+
+.aiui-frame__handle--right {
+  right: -8px;
+}
+
+.aiui-frame__handle--bottom {
+  bottom: -8px;
+}
+
+.aiui-frame__handle--left {
+  left: -8px;
 }
 
 .aiui-panel {

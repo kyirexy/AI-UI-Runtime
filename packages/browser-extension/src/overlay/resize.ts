@@ -9,6 +9,7 @@ type ResizeBindingOptions = {
   mode: OverlayMode;
   primarySelectedComponent: SelectedComponent;
   selectedCount: number;
+  overlayFrameElement: HTMLElement | null;
   intentEngine: IntentEngine;
   onIntent: (intent: UIIntent, nextSelection: NonNullable<SelectedComponent>) => void;
   onSelectedRectChange: (rect: Rect) => void;
@@ -18,15 +19,21 @@ const MIN_PREVIEW_WIDTH = 48;
 const MIN_PREVIEW_HEIGHT = 40;
 
 export function bindResizeBehavior(options: ResizeBindingOptions): () => void {
-  if (!options.primarySelectedComponent || options.mode !== "resize" || options.selectedCount !== 1) {
+  if (
+    !options.primarySelectedComponent ||
+    !options.overlayFrameElement ||
+    options.mode !== "resize" ||
+    options.selectedCount !== 1
+  ) {
     return () => undefined;
   }
 
   const selectedComponent = options.primarySelectedComponent;
   const target = selectedComponent.element;
+  const overlayFrame = options.overlayFrameElement;
   let beforeRect = getElementRect(target);
 
-  const interactable = interact(target).resizable({
+  const interactable = interact(overlayFrame).resizable({
     edges: {
       top: true,
       right: true,
@@ -44,6 +51,7 @@ export function bindResizeBehavior(options: ResizeBindingOptions): () => void {
     listeners: {
       start() {
         beforeRect = getElementRect(target);
+        overlayFrame.style.cursor = "nwse-resize";
       },
       move(event) {
         updatePreviewTranslation(target, event.deltaRect.left, event.deltaRect.top);
@@ -51,6 +59,7 @@ export function bindResizeBehavior(options: ResizeBindingOptions): () => void {
         options.onSelectedRectChange(getElementRect(target));
       },
       end() {
+        overlayFrame.style.cursor = "";
         const afterRect = getElementRect(target);
         options.onSelectedRectChange(afterRect);
 
@@ -69,6 +78,7 @@ export function bindResizeBehavior(options: ResizeBindingOptions): () => void {
   });
 
   return () => {
+    overlayFrame.style.cursor = "";
     interactable.unset();
   };
 }
