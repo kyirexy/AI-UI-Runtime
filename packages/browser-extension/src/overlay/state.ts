@@ -24,12 +24,21 @@ export type SelectedComponent = {
   element: HTMLElement;
 } | null;
 
+export type PanelScale = 0.75 | 0.85 | 1 | 1.15 | 1.3;
+
+export type PanelSize = {
+  width: number;
+  height: number;
+};
+
 export type OverlayState = {
   mode: OverlayMode;
   hoveredElement: HTMLElement | null;
   selectedComponents: NonNullable<SelectedComponent>[];
   activeSelectionId: string | null;
   lastIntent: UIIntent | null;
+  panelScale: PanelScale;
+  panelSize: PanelSize;
 };
 
 export type OverlayAction =
@@ -60,14 +69,27 @@ export type OverlayAction =
         id: string;
         rect: Rect;
       }>;
+    }
+  | {
+      type: "set-panel-scale";
+      scale: PanelScale;
+    }
+  | {
+      type: "set-panel-size";
+      size: PanelSize;
     };
+
+export const DEFAULT_PANEL_WIDTH = 388;
+export const DEFAULT_PANEL_HEIGHT = 600;
 
 export const initialOverlayState: OverlayState = {
   mode: "adjust",
   hoveredElement: null,
   selectedComponents: [],
   activeSelectionId: null,
-  lastIntent: null
+  lastIntent: null,
+  panelScale: 1,
+  panelSize: { width: DEFAULT_PANEL_WIDTH, height: DEFAULT_PANEL_HEIGHT }
 };
 
 function isSameRect(a: Rect, b: Rect): boolean {
@@ -188,6 +210,16 @@ export function overlayReducer(state: OverlayState, action: OverlayAction): Over
         selectedComponents: nextSelection
       };
     }
+    case "set-panel-scale":
+      return {
+        ...state,
+        panelScale: action.scale
+      };
+    case "set-panel-size":
+      return {
+        ...state,
+        panelSize: action.size
+      };
     default:
       return state;
   }

@@ -16,8 +16,8 @@ import { bindDragBehavior, resetPreviewForElement } from "./drag";
 import { applyEditingStyles, resetEditingStyles } from "./preview";
 import { bindResizeBehavior } from "./resize";
 import { createSelectedComponent, formatElementLabel, isOverlayEvent, resolveSelectableElement } from "./selection";
-import { getActiveSelectedComponent, initialOverlayState, overlayReducer } from "./state";
-import type { OverlayMode, SelectedComponent } from "./state";
+import { getActiveSelectedComponent, initialOverlayState, overlayReducer, DEFAULT_PANEL_WIDTH, DEFAULT_PANEL_HEIGHT } from "./state";
+import type { OverlayMode, SelectedComponent, PanelSize } from "./state";
 
 type OverlayAppProps = {
   locale: SupportedLocale;
@@ -42,7 +42,18 @@ type PanelDragState = {
   originY: number;
 };
 
-const PANEL_WIDTH = 388;
+type PanelResizeState = {
+  startX: number;
+  startY: number;
+  startWidth: number;
+  startHeight: number;
+  startLeft: number;
+  startTop: number;
+  edge: "left" | "right" | "top" | "bottom" | "top-left" | "top-right" | "bottom-left" | "bottom-right";
+};
+
+const MIN_PANEL_WIDTH = 280;
+const MIN_PANEL_HEIGHT = 400;
 
 function toFrameStyle(rect: Rect): CSSProperties {
   return {
@@ -56,9 +67,9 @@ function getPanelMargin(): number {
   return window.innerWidth <= 640 ? 12 : 20;
 }
 
-function getDefaultPanelPosition(): PanelPosition {
+function getDefaultPanelPosition(panelWidth: number): PanelPosition {
   const margin = getPanelMargin();
-  const width = Math.min(PANEL_WIDTH, window.innerWidth - margin * 2);
+  const width = Math.min(panelWidth, window.innerWidth - margin * 2);
 
   return {
     x: Math.max(margin, window.innerWidth - width - margin),
@@ -70,8 +81,8 @@ function clampPanelPosition(position: PanelPosition, panelWidth: number, panelHe
   const margin = getPanelMargin();
 
   return {
-    x: Math.min(Math.max(position.x, margin), Math.max(margin, window.innerWidth - panelWidth - margin)),
-    y: Math.min(Math.max(position.y, margin), Math.max(margin, window.innerHeight - panelHeight - margin))
+    x: Math.max(margin, Math.min(position.x, window.innerWidth - panelWidth - margin)),
+    y: Math.max(margin, Math.min(position.y, window.innerHeight - panelHeight - margin))
   };
 }
 
@@ -175,7 +186,8 @@ export function OverlayApp({ locale, onExit, overlayHost }: OverlayAppProps): JS
   const [showCaptureCard, setShowCaptureCard] = useState(false);
   const [capturedContext, setCapturedContext] = useState<IntentCopyContext | null>(null);
   const [instructionDraft, setInstructionDraft] = useState("");
-  const [panelPosition, setPanelPosition] = useState<PanelPosition>(() => getDefaultPanelPosition());
+  const [panelPosition, setPanelPosition] = useState<PanelPosition>(() => getDefaultPanelPosition(DEFAULT_PANEL_WIDTH));
+  const panelResizeRef = useRef<PanelResizeState | null>(null);
   const intentEngineRef = useRef(new IntentEngine());
   const latestSelectedRef = useRef<NonNullable<SelectedComponent>[]>(state.selectedComponents);
   const lastPreviewedComponentsRef = useRef<NonNullable<SelectedComponent>[]>([]);
@@ -196,7 +208,14 @@ export function OverlayApp({ locale, onExit, overlayHost }: OverlayAppProps): JS
   useEffect(() => {
     function handlePointerMove(event: PointerEvent) {
       const dragState = panelDragRef.current;
+      const resizeState = panelResizeRef.current;
       const panel = panelRef.current;
+
+      if (resizeState) {
+        handlePanelResizeMove(event);
+        return;
+      }
+
       if (!dragState || !panel) {
         return;
       }
@@ -215,16 +234,11 @@ export function OverlayApp({ locale, onExit, overlayHost }: OverlayAppProps): JS
 
     function handlePointerUp() {
       panelDragRef.current = null;
+      panelResizeRef.current = null;
     }
 
     function handleResize() {
-      const panel = panelRef.current;
-      if (!panel) {
-        setPanelPosition(getDefaultPanelPosition());
-        return;
-      }
-
-      setPanelPosition((current) => clampPanelPosition(current, panel.offsetWidth, panel.offsetHeight));
+      setPanelPosition((current) => clampPanelPosition(current, state.panelSize.width, state.panelSize.height));
     }
 
     window.addEventListener("pointermove", handlePointerMove);
@@ -236,7 +250,7 @@ export function OverlayApp({ locale, onExit, overlayHost }: OverlayAppProps): JS
       window.removeEventListener("pointerup", handlePointerUp);
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [state.panelSize]);
 
   useEffect(() => {
     return () => {
@@ -508,8 +522,75 @@ export function OverlayApp({ locale, onExit, overlayHost }: OverlayAppProps): JS
   const panelStyle: CSSProperties = {
     top: `${panelPosition.y}px`,
     left: `${panelPosition.x}px`,
-    right: "auto"
+    right: "auto",
+    width: `${state.panelSize.width}px`,
+    height: `${state.panelSize.height}px`
   };
+
+  function handlePanelResizeStart(event: ReactPointerEvent<HTMLElement>, edge: PanelResizeState["edge"]) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    panelResizeRef.current = {
+      startX: event.clientX,
+      startY: event.clientY,
+      startWidth: state.panelSize.width,
+      startHeight: state.panelSize.height,
+      startLeft: panelPosition.x,
+      startTop: panelPosition.y,
+      edge
+    };
+
+    (event.target as HTMLElement).setPointerCapture(event.pointerId);
+  }
+
+  function handlePanelResizeMove(event: PointerEvent) {
+    const resizeState = panelResizeRef.current;
+    if (!resizeState) {
+      return;
+    }
+
+    const deltaX = event.clientX - resizeState.startX;
+    const deltaY = event.clientY - resizeState.startY;
+
+    let newWidth = resizeState.startWidth;
+    let newHeight = resizeState.startHeight;
+    let newLeft = resizeState.startLeft;
+    let newTop = resizeState.startTop;
+
+    if (resizeState.edge.includes("right")) {
+      newWidth = resizeState.startWidth + deltaX;
+    }
+    if (resizeState.edge.includes("left")) {
+      newWidth = resizeState.startWidth - deltaX;
+      newLeft = resizeState.startLeft + deltaX;
+    }
+    if (resizeState.edge.includes("bottom")) {
+      newHeight = resizeState.startHeight + deltaY;
+    }
+    if (resizeState.edge.includes("top")) {
+      newHeight = resizeState.startHeight - deltaY;
+      newTop = resizeState.startTop + deltaY;
+    }
+
+    const margin = getPanelMargin();
+    const minLeft = margin;
+    const minTop = margin;
+    const maxRight = window.innerWidth - margin;
+    const maxBottom = window.innerHeight - margin;
+
+    const clampedWidth = Math.max(MIN_PANEL_WIDTH, Math.min(newWidth, maxRight - newLeft));
+    const clampedHeight = Math.max(MIN_PANEL_HEIGHT, Math.min(newHeight, maxBottom - newTop));
+    const clampedLeft = Math.max(minLeft, Math.min(newLeft, maxRight - MIN_PANEL_WIDTH));
+    const clampedTop = Math.max(minTop, Math.min(newTop, maxBottom - MIN_PANEL_HEIGHT));
+
+    dispatch({ type: "set-panel-size", size: { width: clampedWidth, height: clampedHeight } });
+    setPanelPosition({ x: clampedLeft, y: clampedTop });
+  }
+
+  function handlePanelResizeEnd() {
+    panelResizeRef.current = null;
+  }
 
   function setMode(mode: OverlayMode) {
     if (mode === "resize" && selectedComponents.length === 0) {
@@ -652,11 +733,43 @@ export function OverlayApp({ locale, onExit, overlayHost }: OverlayAppProps): JS
 
       <aside
         ref={panelRef}
-        className="aiui-panel"
+        className="aiui-panel aiui-panel--resizable"
         data-ai-ui-runtime-ignore="true"
         aria-label={strings.overlay.title}
         style={panelStyle}
       >
+        <div
+          className="aiui-panel__resize-handle aiui-panel__resize-handle--top"
+          onPointerDown={(e) => handlePanelResizeStart(e, "top")}
+        />
+        <div
+          className="aiui-panel__resize-handle aiui-panel__resize-handle--right"
+          onPointerDown={(e) => handlePanelResizeStart(e, "right")}
+        />
+        <div
+          className="aiui-panel__resize-handle aiui-panel__resize-handle--bottom"
+          onPointerDown={(e) => handlePanelResizeStart(e, "bottom")}
+        />
+        <div
+          className="aiui-panel__resize-handle aiui-panel__resize-handle--left"
+          onPointerDown={(e) => handlePanelResizeStart(e, "left")}
+        />
+        <div
+          className="aiui-panel__resize-handle aiui-panel__resize-handle--top-right"
+          onPointerDown={(e) => handlePanelResizeStart(e, "top-right")}
+        />
+        <div
+          className="aiui-panel__resize-handle aiui-panel__resize-handle--bottom-right"
+          onPointerDown={(e) => handlePanelResizeStart(e, "bottom-right")}
+        />
+        <div
+          className="aiui-panel__resize-handle aiui-panel__resize-handle--bottom-left"
+          onPointerDown={(e) => handlePanelResizeStart(e, "bottom-left")}
+        />
+        <div
+          className="aiui-panel__resize-handle aiui-panel__resize-handle--top-left"
+          onPointerDown={(e) => handlePanelResizeStart(e, "top-left")}
+        />
         <div className="aiui-panel__header aiui-panel__drag-handle" onPointerDown={handlePanelPointerDown}>
           <div>
             <p className="aiui-panel__eyebrow">{strings.overlay.eyebrow}</p>

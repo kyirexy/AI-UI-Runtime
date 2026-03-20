@@ -161,6 +161,88 @@
   box-shadow: 0 28px 60px rgba(15, 23, 42, 0.18);
   backdrop-filter: blur(18px);
   pointer-events: auto;
+  font-size: 14px;
+}
+
+.aiui-panel--resizable {
+  right: auto;
+  min-width: 280px;
+  min-height: 400px;
+}
+
+.aiui-panel__resize-handle {
+  position: absolute;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.aiui-panel__resize-handle--top,
+.aiui-panel__resize-handle--bottom {
+  left: 10px;
+  right: 10px;
+  height: 6px;
+  cursor: ns-resize;
+}
+
+.aiui-panel__resize-handle--top {
+  top: -3px;
+}
+
+.aiui-panel__resize-handle--bottom {
+  bottom: -3px;
+}
+
+.aiui-panel__resize-handle--left,
+.aiui-panel__resize-handle--right {
+  top: 10px;
+  bottom: 10px;
+  width: 6px;
+  cursor: ew-resize;
+}
+
+.aiui-panel__resize-handle--left {
+  left: -3px;
+}
+
+.aiui-panel__resize-handle--right {
+  right: -3px;
+}
+
+.aiui-panel__resize-handle--top-left,
+.aiui-panel__resize-handle--top-right,
+.aiui-panel__resize-handle--bottom-left,
+.aiui-panel__resize-handle--bottom-right {
+  width: 14px;
+  height: 14px;
+}
+
+.aiui-panel__resize-handle--top-left {
+  top: -4px;
+  left: -4px;
+  cursor: nwse-resize;
+}
+
+.aiui-panel__resize-handle--top-right {
+  top: -4px;
+  right: -4px;
+  cursor: nesw-resize;
+}
+
+.aiui-panel__resize-handle--bottom-left {
+  bottom: -4px;
+  left: -4px;
+  cursor: nesw-resize;
+}
+
+.aiui-panel__resize-handle--bottom-right {
+  bottom: -4px;
+  right: -4px;
+  cursor: nwse-resize;
+}
+
+.aiui-panel__resize-handle:hover {
+  background: rgba(37, 99, 235, 0.15);
+  border-radius: 4px;
 }
 
 .aiui-panel__header,
@@ -246,6 +328,44 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
+}
+
+.aiui-scale-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.aiui-scale-button {
+  min-height: 32px;
+  padding: 6px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 10px;
+  background: #ffffff;
+  color: #475569;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.aiui-scale-button:hover,
+.aiui-scale-button:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(37, 99, 235, 0.32);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  outline: none;
+}
+
+.aiui-scale-button.is-active {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(59, 130, 246, 0.08));
+  border-color: rgba(37, 99, 235, 0.36);
+  color: #1d4ed8;
 }
 
 .aiui-toolbar__button,
@@ -534,10 +654,14 @@
 @media (max-width: 640px) {
   .aiui-panel {
     top: 12px;
-    right: 12px;
     left: 12px;
     width: auto;
+    max-width: calc(100vw - 24px);
     max-height: calc(100vh - 24px);
+  }
+
+  .aiui-panel--resizable {
+    right: auto;
   }
 
   .aiui-primary-actions,
