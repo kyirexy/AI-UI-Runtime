@@ -76,7 +76,7 @@ http://localhost:5173
 
 ## Video
 
-- Douyin video: [Why AI keeps failing at webpage UI edits](https://v.douyin.com/Xexg4G9adq4/)
+- Bilibili video: [Why AI keeps failing at webpage UI edits](https://www.bilibili.com/video/BV1dvwVzXECw)
 
 ## Three modes
 

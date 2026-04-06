@@ -76,7 +76,7 @@ http://localhost:5173
 
 ## 视频
 
-- 抖音视频：[为什么 AI 改网页 UI 总翻车？问题其实出在这里](https://v.douyin.com/Xexg4G9adq4/)
+- B 站视频：[为什么 AI 改网页 UI 总翻车？问题其实出在这里](https://www.bilibili.com/video/BV1dvwVzXECw)
 
 ## 三个模式
 
