@@ -127,6 +127,8 @@ type OverlayStrings = {
   aiCopyHint: string;
   controlsHint: string;
   hierarchyHint: string;
+  panelScaleLabel: string;
+  panelScaleHint: string;
   selectBeforeResize: string;
   resizeSingleOnly: string;
   resizeFocusedPrimary: string;
@@ -239,9 +241,11 @@ const strings: Record<SupportedLocale, ExtensionStrings> = {
       aiCopyHint: "“复制给 AI”会自动附带定位线索、组件层级、最近一次视觉操作，以及你的手写修改要求。",
       controlsHint: "控制台 + 面板",
       hierarchyHint: "这些层级线索用于帮助 AI 定位真正控制布局的父级容器，而不是只改最内层节点。",
-      selectBeforeResize: "需要先选中一个元素，才能进入“尺寸”。",
+      panelScaleLabel: "面板大小",
+      panelScaleHint: "调整控制面板的显示大小",
+      selectBeforeResize: "需要先选中一个元素，才能进入「尺寸」。",
       resizeSingleOnly: "尺寸模式只支持单选。",
-      resizeFocusedPrimary: "已自动聚焦最后选中的元素，并切换到“尺寸”。",
+      resizeFocusedPrimary: "已自动聚焦最后选中的元素，并切换到「尺寸」。",
       intentCaptured: "操作完成，Intent 已生成。"
     }
   },
@@ -344,6 +348,8 @@ const strings: Record<SupportedLocale, ExtensionStrings> = {
       aiCopyHint: "Copy for AI automatically includes locator hints, hierarchy clues, the latest visual action, and your typed request.",
       controlsHint: "console + panel",
       hierarchyHint: "Hierarchy clues help AI find the real parent container or layout boundary instead of changing only the innermost node.",
+      panelScaleLabel: "Panel size",
+      panelScaleHint: "Adjust the display size of the control panel",
       selectBeforeResize: "Select one element before entering Size mode.",
       resizeSingleOnly: "Size mode supports only one selected element.",
       resizeFocusedPrimary: "Focused the last selected element and switched to Size mode.",
